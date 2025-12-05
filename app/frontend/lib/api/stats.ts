@@ -39,8 +39,8 @@ async function safeJson(res: Response) {
   }
 }
 
-export async function getCurrentMonthVisits() {
-  const res = await fetch(`${getApiBase(ssr)}/stats/month`,)
+export async function getCurrentMonthVisits(ssr = false) {
+  const res = await fetch(`${getApiBase(ssr)}/stats/monthly/current`,)
   if (!res.ok) {
     const text = await res.text();
     console.error('Erreur API /stats/month:', text);
@@ -90,7 +90,7 @@ export async function getTotalUsers(ssr = false): Promise<UsersCountDto | null> 
 export async function getStats(ssr = false) {
   const [daily, monthly, global] = await Promise.all([
     getDailyVisits(ssr),
-    getCurrentMonthVisits(),
+    getCurrentMonthVisits(ssr),
     getGlobalStats(ssr),
   ]);
 
