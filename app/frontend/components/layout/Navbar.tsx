@@ -83,6 +83,12 @@ export default function Navbar() {
         >
           Dons
         </button>
+                <button
+          onClick={() => handleNavigation('#remerciements')}
+          className="text-text hover:text-primary transition-colors"
+        >
+          Remerciements
+        </button>
         {renderUserSection()}
       </div>
 
