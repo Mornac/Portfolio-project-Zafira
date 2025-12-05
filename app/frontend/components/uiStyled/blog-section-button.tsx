@@ -1,24 +1,26 @@
 'use client';
 
 import React from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from './button'; // On utilise le Button “solide” précédent
 
 interface BlogSectionButtonProps {
   children: React.ReactNode;
   href?: string;
   onClick?: () => void;
+  variant?: 'default' | 'jaune' | 'secondary' | 'blog'; // Correspond aux variantes disponibles
+  size?: 'default' | 'sm' | 'lg'; // Correspond aux tailles disponibles
 }
 
-export default function BlogSectionButton({ children, href, onClick }: BlogSectionButtonProps) {
-  const btn = (
-    <Button
-      className="rounded-full bg-[var(--color-primary)] text-white px-6 py-2 hover:bg-[var(--color-primary-hover)] transition-colors"
-      size="sm"
-      onClick={onClick}
-    >
+export default function BlogSectionButton({
+  children,
+  href,
+  onClick,
+  variant = 'default',
+  size = 'default',
+}: BlogSectionButtonProps) {
+  return (
+    <Button href={href} onClick={onClick} variant={variant} size={size}>
       {children}
     </Button>
   );
-
-  return href ? <a href={href}>{btn}</a> : btn;
 }

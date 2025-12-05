@@ -10,6 +10,7 @@ export interface MonthlyVisitDto {
   month: string;
   total: number;
 }
+
 export interface GlobalStatsDto {
   id: number;
   totalVisitors: number;
@@ -25,67 +26,77 @@ export function getApiBase(ssr = false) {
     : process.env.NEXT_PUBLIC_API_BASE;
 }
 
-export async function getCurrentMonthVisits(
-  ssr = false
-): Promise<MonthlyVisitDto> {
-  const res = await fetch(`${getApiBase(ssr)}/stats/monthly/current`, {
-    cache: ssr ? 'no-store' : 'default',
-  });
-  if (!res.ok) throw new Error('Impossible de récupérer les visites du mois');
-  return res.json();
+// ------------------ Fonctions API sécurisées ------------------
+
+async function safeJson(res: Response) {
+  const text = await res.text();
+  if (!text) return null; // retourne null si vide
+  try {
+    return JSON.parse(text);
+  } catch (err) {
+    console.error('Erreur JSON.parse:', err, 'avec la réponse:', text);
+    return null;
+  }
 }
 
-export async function getDailyVisits(
-  ssr = false
-): Promise<DailyVisitDto> {
+export async function getCurrentMonthVisits() {
+  const res = await fetch(`${getApiBase(ssr)}/stats/month`,)
+  if (!res.ok) {
+    const text = await res.text();
+    console.error('Erreur API /stats/month:', text);
+    throw new Error('Impossible de récupérer les visites du mois');
+  }
+  return safeJson(res);
+}
+
+export async function getDailyVisits(ssr = false): Promise<DailyVisitDto | null> {
   const res = await fetch(`${getApiBase(ssr)}/stats/daily/today`, {
     cache: ssr ? 'no-store' : 'default',
   });
   if (!res.ok) throw new Error('Impossible de récupérer les visites du jour');
-  return res.json();
+  return safeJson(res);
 }
 
-export async function getGlobalStats(ssr = false): Promise<GlobalStatsDto> {
+export async function getGlobalStats(ssr = false): Promise<GlobalStatsDto | null> {
   const res = await fetch(`${getApiBase(ssr)}/stats/global`, {
     cache: ssr ? 'no-store' : 'default',
   });
   if (!res.ok)
     throw new Error('Impossible de récupérer les statistiques globales');
-  return res.json();
+  return safeJson(res);
 }
 
-// Hit endpoint (record visit)
 export async function recordVisit(ssr = false): Promise<{
-  daily: DailyVisitDto;
-  monthly: MonthlyVisitDto;
-  global: GlobalStatsDto;
+  daily: DailyVisitDto | null;
+  monthly: MonthlyVisitDto | null;
+  global: GlobalStatsDto | null;
 }> {
-  const res = await fetch(`${getApiBase(ssr)}/stats/hit`, {method: 'POST'});
+  const res = await fetch(`${getApiBase(ssr)}/stats/hit`, { method: 'POST' });
   if (!res.ok) throw new Error("Impossible d'enregistrer la visite");
-  return res.json();
+  return safeJson(res);
 }
 
-// Total users
-export async function getTotalUsers(ssr = false): Promise<UsersCountDto> {
+export async function getTotalUsers(ssr = false): Promise<UsersCountDto | null> {
   const res = await fetch(`${getApiBase(ssr)}/user/count`, {
     cache: ssr ? 'no-store' : 'default',
   });
   if (!res.ok)
     throw new Error("Impossible de récupérer le nombre d'utilisateurs");
-  return res.json();
+  return safeJson(res);
 }
 
+// ------------------ Fonction pour dashboard ------------------
 
 export async function getStats(ssr = false) {
   const [daily, monthly, global] = await Promise.all([
     getDailyVisits(ssr),
-    getCurrentMonthVisits(ssr),
+    getCurrentMonthVisits(),
     getGlobalStats(ssr),
   ]);
 
   return {
-    daily: daily.count,
-    monthly: monthly.total,
-    global: global.totalVisitors,
+    daily: daily?.count ?? 0,
+    monthly: monthly?.total ?? 0,
+    global: global?.totalVisitors ?? 0,
   };
 }

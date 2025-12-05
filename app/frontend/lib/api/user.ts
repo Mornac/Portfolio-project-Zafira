@@ -17,7 +17,7 @@ export interface UserDto {
   updatedAt?: string;
 }
 
-const API_BASE = 'http://localhost:3001';
+const API_BASE = 'http://localhost:3001/api';
 
 // GET all users
 export async function getUsers(): Promise<UserDto[]> {

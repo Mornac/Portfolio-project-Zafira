@@ -6,6 +6,8 @@ import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.setGlobalPrefix('api');
   const config = new DocumentBuilder()
     .setTitle('Coucou Ingrid API')
     .setDescription('Documentation de l’API Zafira')
@@ -13,7 +15,7 @@ async function bootstrap() {
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('docs', app, document);
 
   app.use(cookieParser());
 
@@ -26,7 +28,7 @@ async function bootstrap() {
   );
 
   app.enableCors({
-    origin: process.env.ALLOWED_ORIGIN,
+    origin: ['http://localhost:3000'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });

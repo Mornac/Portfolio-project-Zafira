@@ -1,5 +1,3 @@
-// lib/api/actions.ts
-
 export interface CreateActionDto {
   title: string;
   description: string;
@@ -18,7 +16,7 @@ export interface ActionDto {
   updatedAt?: string;
 }
 
-const API_BASE = 'http://localhost:3001';
+const API_BASE = 'http://localhost:3001/api';
 
 // create
 export async function createAction(action: CreateActionDto) {

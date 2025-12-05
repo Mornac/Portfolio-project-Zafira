@@ -1,5 +1,5 @@
 export async function login(credentials: {email: string; password: string}) {
-  const res = await fetch('http://localhost:3001/auth/login', {
+  const res = await fetch('http://localhost:3001/api/auth/login', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     credentials: 'include',
@@ -15,7 +15,7 @@ export async function register(payload: {
   email: string;
   password: string;
 }) {
-  const res = await fetch('http://localhost:3001/auth/register', {
+  const res = await fetch('http://localhost:3001/api/auth/register', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({
@@ -30,11 +30,11 @@ export async function register(payload: {
 }
 
 export async function loginWithGoogle() {
-   window.location.href = 'http://localhost:3001/auth/google';
+   window.location.href = 'http://localhost:3001/api/auth/google';
 }
 
 export async function fetchUser() {
-  const res = await fetch('http://localhost:3001/auth/me', {
+  const res = await fetch('http://localhost:3001/api/auth/me', {
     method: 'GET',
     credentials: 'include',
   });
@@ -50,7 +50,7 @@ export async function fetchUser() {
 
 
 export async function logout() {
-  const res = await fetch('http://localhost:3001/auth/logout', {
+  const res = await fetch('http://localhost:3001/api/auth/logout', {
     method: 'POST',
     credentials: 'include',
   });

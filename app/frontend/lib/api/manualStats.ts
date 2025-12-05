@@ -27,8 +27,8 @@ export interface UpdateManualStatisticEntryDto {
 // Base URL Helper
 function getApiBase(ssr = false) {
   return ssr
-    ? process.env.API_BASE_SSR || 'http://backend:3001'
-    : process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:3001';
+    ? process.env.API_BASE_SSR || 'http://backend:3001/api'
+    : process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:3001/api';
 }
 
 // GET all manual stats
