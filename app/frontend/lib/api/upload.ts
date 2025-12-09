@@ -13,7 +13,7 @@ export async function uploadFile(file: File): Promise<UploadedFileEntity> {
   const formData = new FormData();
   formData.append('file', file);
 
-  const res = await fetch('http://localhost:3001/uploads', {
+  const res = await fetch('http://localhost:3001/api/uploads', {
     method: 'POST',
     body: formData,
     credentials: 'include',

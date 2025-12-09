@@ -28,8 +28,7 @@ export default function AdminPartnerForm({onCreated}: AdminPartnerFormProps) {
   const router = useRouter();
 
   // --- API base URL from environment variables ---
-  const API_BASE_URL =
-    process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:3001';
+  const API_IMG_URL = 'http://localhost:3001';
 
   // --- Clean up preview URL when component unmounts ---
   React.useEffect(() => {
@@ -61,7 +60,7 @@ export default function AdminPartnerForm({onCreated}: AdminPartnerFormProps) {
         const uploaded = await uploadFile(file);
         logoUrl = uploaded.url.startsWith('http')
           ? uploaded.url
-          : `${API_BASE_URL}${uploaded.url}`;
+          : `${API_IMG_URL}${uploaded.url}`;
       }
 
       // Build partner DTO

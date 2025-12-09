@@ -12,6 +12,9 @@ interface AdminPartnerEditFormProps {
   onUpdated?: () => void;
 }
 
+
+const API_IMG_URL = 'http://localhost:3001';
+
 export default function AdminPartnerEditForm({
   partner,
   onUpdated,
@@ -43,7 +46,9 @@ export default function AdminPartnerEditForm({
       let logoUrl = partner.logoUrl;
       if (file) {
         const uploaded = await uploadFile(file);
-        logoUrl = uploaded.url;
+        logoUrl = uploaded.url.startsWith('http')
+          ? uploaded.url
+          : `${API_IMG_URL}${uploaded.url}`;
       }
 
       const updateData: CreatePartnerDto = {
