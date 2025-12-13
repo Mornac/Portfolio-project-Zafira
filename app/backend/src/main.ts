@@ -1,13 +1,15 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ValidationPipe } from '@nestjs/common';
+import 'dotenv/config';
+import {ValidationPipe} from '@nestjs/common';
 import cookieParser from 'cookie-parser';
+import {NestFactory} from '@nestjs/core';
+import {DocumentBuilder, SwaggerModule} from '@nestjs/swagger';
+import {AppModule} from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.setGlobalPrefix('api');
+  const globalPrefix = process.env.API_PREFIX ?? 'api';
+  app.setGlobalPrefix(globalPrefix);
   const config = new DocumentBuilder()
     .setTitle('Coucou Ingrid API')
     .setDescription('Documentation de l’API Zafira')
@@ -15,7 +17,7 @@ async function bootstrap() {
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, document);
+  SwaggerModule.setup(`${globalPrefix}/docs`, app, document);
 
   app.use(cookieParser());
 
@@ -27,13 +29,19 @@ async function bootstrap() {
     }),
   );
 
+  const allowedOrigins =
+    process.env.ALLOWED_ORIGIN?.split(',')
+      .map((origin) => origin.trim())
+      .filter(Boolean) || [];
+
   app.enableCors({
-    origin: ['http://localhost:3000'],
+    origin: allowedOrigins,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
 
-  await app.listen(3001);
+  const port = Number(process.env.PORT) || 3001;
+  await app.listen(port, '0.0.0.0');
 }
 
 bootstrap();

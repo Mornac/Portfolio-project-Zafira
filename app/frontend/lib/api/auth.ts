@@ -1,5 +1,9 @@
+import {getBrowserApiBase, apiUrl} from './url';
+
+const API_BASE = getBrowserApiBase();
+
 export async function login(credentials: {email: string; password: string}) {
-  const res = await fetch('http://localhost:3001/api/auth/login', {
+  const res = await fetch(`${API_BASE}/auth/login`, {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     credentials: 'include',
@@ -15,7 +19,7 @@ export async function register(payload: {
   email: string;
   password: string;
 }) {
-  const res = await fetch('http://localhost:3001/api/auth/register', {
+  const res = await fetch(`${API_BASE}/auth/register`, {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({
@@ -30,11 +34,11 @@ export async function register(payload: {
 }
 
 export async function loginWithGoogle() {
-   window.location.href = 'http://localhost:3001/api/auth/google';
+  window.location.href = apiUrl('auth/google');
 }
 
 export async function fetchUser() {
-  const res = await fetch('http://localhost:3001/api/auth/me', {
+  const res = await fetch(`${API_BASE}/auth/me`, {
     method: 'GET',
     credentials: 'include',
   });
@@ -50,7 +54,7 @@ export async function fetchUser() {
 
 
 export async function logout() {
-  const res = await fetch('http://localhost:3001/api/auth/logout', {
+  const res = await fetch(`${API_BASE}/auth/logout`, {
     method: 'POST',
     credentials: 'include',
   });
@@ -59,4 +63,3 @@ export async function logout() {
 
   return res.json();
 }
-

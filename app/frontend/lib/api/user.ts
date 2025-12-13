@@ -1,4 +1,5 @@
 // lib/api/user.ts
+import {getBrowserApiBase} from './url';
 
 export interface CreateUserDto {
   email: string;
@@ -17,7 +18,7 @@ export interface UserDto {
   updatedAt?: string;
 }
 
-const API_BASE = 'http://localhost:3001/api';
+const API_BASE = getBrowserApiBase();
 
 // GET all users
 export async function getUsers(): Promise<UserDto[]> {

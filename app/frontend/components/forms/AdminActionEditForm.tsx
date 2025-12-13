@@ -5,8 +5,9 @@ import {Button} from '@/components/uiStyled/button';
 import {uploadFile} from '@/lib/api/upload';
 import {patchAction} from '@/lib/api/actions';
 import type {ActionDto} from '@/lib/api/actions';
-import { cn } from '@/lib/utils/cn';
+import {cn} from '@/lib/utils/cn';
 import Image from 'next/image';
+import {apiUrl} from '@/lib/api/url';
 
 
 interface AdminActionEditFormProps {
@@ -31,8 +32,6 @@ export default function AdminActionEditForm({
   const [error, setError] = React.useState<string | null>(null);
   const [success, setSuccess] = React.useState<string | null>(null);
 
-  const API_BASE_URL = 'http://localhost:3001';
-
   const setFileWithPreview = (file: File | null) => {
     if (previewUrl?.startsWith('blob:')) URL.revokeObjectURL(previewUrl);
     setFile(file);
@@ -52,7 +51,7 @@ export default function AdminActionEditForm({
         const uploaded = await uploadFile(file);
         imageUrl = uploaded.url.startsWith('http')
           ? uploaded.url
-          : `${API_BASE_URL}${uploaded.url}`;
+          : apiUrl(uploaded.url);
       }
 
       await patchAction(action.id, {

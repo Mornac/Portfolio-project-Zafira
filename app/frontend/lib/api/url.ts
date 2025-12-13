@@ -1,14 +1,21 @@
-// app/frontend/lib/api/url.ts
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL; // doit être http://localhost:3001
+// Centralise la construction des URLs API côté front
+const DEFAULT_API_BASE = 'http://localhost:3001/api';
 
-function getBaseUrl(): string {
-  if (!BASE_URL) {
-    throw new Error('La variable d’environnement API n’est pas définie.');
+export function getBrowserApiBase(): string {
+  const base = process.env.NEXT_PUBLIC_API_BASE ?? DEFAULT_API_BASE;
+  return base.replace(/\/$/, '');
+}
+
+export function getBrowserApiOrigin(): string {
+  const base = getBrowserApiBase();
+  try {
+    return new URL(base).origin;
+  } catch {
+    return base.replace(/\/api$/, '');
   }
-  return BASE_URL.replace(/\/$/, '');
 }
 
 export function apiUrl(path: string) {
   const cleanPath = path.startsWith('/') ? path.slice(1) : path;
-  return `${getBaseUrl()}/api/${cleanPath}`;
+  return `${getBrowserApiBase()}/${cleanPath}`;
 }

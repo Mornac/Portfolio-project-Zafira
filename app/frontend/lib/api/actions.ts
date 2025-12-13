@@ -1,3 +1,5 @@
+import {getBrowserApiBase} from './url';
+
 export interface CreateActionDto {
   title: string;
   description: string;
@@ -16,7 +18,7 @@ export interface ActionDto {
   updatedAt?: string;
 }
 
-const API_BASE = 'http://localhost:3001/api';
+const API_BASE = getBrowserApiBase();
 
 // create
 export async function createAction(action: CreateActionDto) {

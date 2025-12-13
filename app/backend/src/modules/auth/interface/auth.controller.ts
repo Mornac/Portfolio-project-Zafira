@@ -8,13 +8,13 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { AuthService } from '../app/auth.service';
-import { RegisterDto } from './dto/register.dto';
-import { LoginDto } from './dto/login.dto';
-import type { Response, Request } from 'express';
-import { User } from '@prisma/client';
-import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
+import {AuthGuard} from '@nestjs/passport';
+import {AuthService} from '../app/auth.service';
+import {RegisterDto} from './dto/register.dto';
+import {LoginDto} from './dto/login.dto';
+import type {Response, Request} from 'express';
+import {User} from '@prisma/client';
+import {JwtAuthGuard} from '../../../common/guards/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -40,7 +40,7 @@ export class AuthController {
   // Login
   @Post('login')
   async login(@Body() dto: LoginDto, @Res() res: Response) {
-    const { access_token, user } = await this.authService.login(
+    const {access_token, user} = await this.authService.login(
       dto.email,
       dto.password,
     );
@@ -71,7 +71,7 @@ export class AuthController {
   ) {
     const prismaUser = req.user;
     if (!prismaUser) {
-      return res.status(401).json({ message: 'No user found' });
+      return res.status(401).json({message: 'No user found'});
     }
 
     const jwtUser: Pick<User, 'id' | 'email' | 'role' | 'firstName'> = {
@@ -90,7 +90,9 @@ export class AuthController {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    return res.redirect('http://localhost:3000/');
+    const redirectUrl =
+      process.env.FRONTEND_URL?.replace(/\/$/, '') || 'http://localhost:3000';
+    return res.redirect(`${redirectUrl}/`);
   }
 
   @Get('me')
@@ -98,9 +100,9 @@ export class AuthController {
   getMe(@Req() req: Request & { user?: User }) {
     // req.user is fullfill via strategy jwt
     if (!req.user) {
-      return { message: 'Not authenticated' };
+      return {message: 'Not authenticated'};
     }
-    return { user: req.user };
+    return {user: req.user};
   }
 
   // Route pour logout
@@ -112,6 +114,6 @@ export class AuthController {
       secure: true,
       sameSite: 'lax',
     });
-    return res.json({ message: 'Logged out successfully' });
+    return res.json({message: 'Logged out successfully'});
   }
 }

@@ -7,6 +7,7 @@ import {uploadFile} from '@/lib/api/upload';
 import {patchBlog} from '@/lib/api/blog';
 import type {BlogDto} from '@/lib/api/blog';
 import {cn} from '@/lib/utils/cn';
+import {apiUrl} from '@/lib/api/url';
 
 interface AdminBlogEditFormProps {
   blog: BlogDto;
@@ -34,8 +35,6 @@ export default function AdminBlogEditForm({
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [success, setSuccess] = React.useState<string | null>(null);
-
-  const API_BASE_URL = 'http://localhost:3001';
 
   React.useEffect(() => {
     return () => {
@@ -79,7 +78,7 @@ export default function AdminBlogEditForm({
         const uploaded = await uploadFile(file);
         mediaUrl = uploaded.url.startsWith('http')
           ? uploaded.url
-          : `${API_BASE_URL}${uploaded.url}`;
+          : apiUrl(uploaded.url);
         mediaType = uploaded.mimeType.startsWith('video') ? 'VIDEO' : 'IMAGE';
       }
 
@@ -88,7 +87,7 @@ export default function AdminBlogEditForm({
         const uploadedCover = await uploadFile(coverFile);
         coverImageUrl = uploadedCover.url.startsWith('http')
           ? uploadedCover.url
-          : `${API_BASE_URL}${uploadedCover.url}`;
+          : apiUrl(uploadedCover.url);
       } else if (mediaType === 'IMAGE') {
         coverImageUrl = mediaUrl;
       }

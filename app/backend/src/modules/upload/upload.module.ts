@@ -6,11 +6,17 @@ import { join } from 'path';
 
 @Module({
   imports: [
-    // To serve file from /uploads
-    ServeStaticModule.forRoot({
-      rootPath: join(process.cwd(), 'uploads'),
-      serveRoot: '/uploads',
-    }),
+    // Serve uploaded files under both /uploads and /api/uploads to match frontend needs
+    ServeStaticModule.forRoot(
+      {
+        rootPath: join(process.cwd(), 'uploads'),
+        serveRoot: '/uploads',
+      },
+      {
+        rootPath: join(process.cwd(), 'uploads'),
+        serveRoot: '/api/uploads',
+      },
+    ),
   ],
   controllers: [UploadController],
   providers: [UploadService],

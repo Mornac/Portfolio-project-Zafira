@@ -5,6 +5,7 @@ import {Button} from '../uiStyled/button';
 import {cn} from '@/lib/utils/cn';
 import {uploadFile} from '@/lib/api/upload';
 import {createAction, CreateActionDto} from '@/lib/api/actions';
+import {apiUrl} from '@/lib/api/url';
 
 interface AdminActionFormProps {
   onCreated?: () => void; // callback pour refresh de la liste
@@ -45,14 +46,13 @@ export default function AdminActionForm({onCreated}: AdminActionFormProps) {
     setLoading(true);
 
     try {
-      const API_BASE_URL = 'http://localhost:3001';
       let imageUrl: string | undefined;
 
       if (file) {
         const uploaded = await uploadFile(file);
         imageUrl = uploaded.url.startsWith('http')
           ? uploaded.url
-          : `${API_BASE_URL}${uploaded.url}`;
+          : apiUrl(uploaded.url);
       }
 
       const actionData: CreateActionDto = {

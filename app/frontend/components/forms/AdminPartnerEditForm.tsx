@@ -6,14 +6,12 @@ import {Button} from '../uiStyled/button';
 import {uploadFile} from '@/lib/api/upload';
 import {updatePartner, PartnerDto, CreatePartnerDto} from '@/lib/api/partners';
 import toast from 'react-hot-toast';
+import {apiUrl} from '@/lib/api/url';
 
 interface AdminPartnerEditFormProps {
   partner: PartnerDto;
   onUpdated?: () => void;
 }
-
-
-const API_IMG_URL = 'http://localhost:3001';
 
 export default function AdminPartnerEditForm({
   partner,
@@ -48,7 +46,7 @@ export default function AdminPartnerEditForm({
         const uploaded = await uploadFile(file);
         logoUrl = uploaded.url.startsWith('http')
           ? uploaded.url
-          : `${API_IMG_URL}${uploaded.url}`;
+          : apiUrl(uploaded.url);
       }
 
       const updateData: CreatePartnerDto = {

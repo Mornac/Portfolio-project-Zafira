@@ -8,6 +8,7 @@ import {uploadFile} from '@/lib/api/upload';
 import {createPartner, CreatePartnerDto} from '@/lib/api/partners';
 import {useRouter} from 'next/navigation';
 import toast from 'react-hot-toast';
+import {apiUrl} from '@/lib/api/url';
 
 interface AdminPartnerFormProps {
   onCreated?: () => void;
@@ -26,9 +27,6 @@ export default function AdminPartnerForm({onCreated}: AdminPartnerFormProps) {
   const [loading, setLoading] = React.useState(false);
 
   const router = useRouter();
-
-  // --- API base URL from environment variables ---
-  const API_IMG_URL = 'http://localhost:3001';
 
   // --- Clean up preview URL when component unmounts ---
   React.useEffect(() => {
@@ -60,7 +58,7 @@ export default function AdminPartnerForm({onCreated}: AdminPartnerFormProps) {
         const uploaded = await uploadFile(file);
         logoUrl = uploaded.url.startsWith('http')
           ? uploaded.url
-          : `${API_IMG_URL}${uploaded.url}`;
+          : apiUrl(uploaded.url);
       }
 
       // Build partner DTO

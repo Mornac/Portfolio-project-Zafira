@@ -1,4 +1,6 @@
 // lib/api/upload.ts
+import {getBrowserApiBase} from './url';
+
 export interface UploadedFileEntity {
   originalName: string;
   fileName: string;
@@ -8,12 +10,13 @@ export interface UploadedFileEntity {
   url: string;
   uploadedAt: string; // ISO string
 }
+const API_BASE = getBrowserApiBase();
 
 export async function uploadFile(file: File): Promise<UploadedFileEntity> {
   const formData = new FormData();
   formData.append('file', file);
 
-  const res = await fetch('http://localhost:3001/api/uploads', {
+  const res = await fetch(`${API_BASE}/uploads`, {
     method: 'POST',
     body: formData,
     credentials: 'include',

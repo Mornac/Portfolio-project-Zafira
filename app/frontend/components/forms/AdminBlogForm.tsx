@@ -4,8 +4,9 @@ import * as React from 'react';
 import {Button} from '../uiStyled/button';
 import {cn} from '@/lib/utils/cn';
 import {uploadFile} from '@/lib/api/upload';
-import { createBlog, CreateBlogDto } from '@/lib/api/blog';
+import {createBlog, CreateBlogDto} from '@/lib/api/blog';
 import {useRouter} from 'next/navigation';
+import {apiUrl} from '@/lib/api/url';
 
 interface AdminBlogFormProps {
   onCreated?: () => void;
@@ -74,7 +75,6 @@ export default function AdminBlogForm({onCreated}: AdminBlogFormProps) {
     setLoading(true);
 
     try {
-      const API_BASE_URL = 'http://localhost:3001';
       let mediaUrl: string | undefined;
       let mediaType: 'IMAGE' | 'VIDEO' | undefined;
       let coverImageUrl: string | undefined;
@@ -83,7 +83,7 @@ export default function AdminBlogForm({onCreated}: AdminBlogFormProps) {
         const uploaded = await uploadFile(file);
         mediaUrl = uploaded.url.startsWith('http')
           ? uploaded.url
-          : `${API_BASE_URL}${uploaded.url}`;
+          : apiUrl(uploaded.url);
         mediaType = uploaded.mimeType.startsWith('video') ? 'VIDEO' : 'IMAGE';
       }
 
@@ -91,7 +91,7 @@ export default function AdminBlogForm({onCreated}: AdminBlogFormProps) {
         const uploadedCover = await uploadFile(coverFile);
         coverImageUrl = uploadedCover.url.startsWith('http')
           ? uploadedCover.url
-          : `${API_BASE_URL}${uploadedCover.url}`;
+          : apiUrl(uploadedCover.url);
       } else if (mediaType === 'IMAGE') {
         coverImageUrl = mediaUrl;
       }
