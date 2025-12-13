@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import Image from 'next/image';
 import {Button} from '../uiStyled/button';
 import {cn} from '@/lib/utils/cn';
 import {uploadFile} from '@/lib/api/upload';
@@ -131,14 +132,6 @@ export default function AdminBlogForm({onCreated}: AdminBlogFormProps) {
     }
   };
 
-  // stylized file input handler
-  const handleChooseFile =
-    (setter: (f: File | null) => void) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const chosen = e.target.files?.[0] ?? null;
-      setter(chosen);
-    };
-
   return (
     <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
       {/* Title (50% width) */}
@@ -201,9 +194,12 @@ export default function AdminBlogForm({onCreated}: AdminBlogFormProps) {
               />
             ) : (
               // image preview: same sizing
-              <img
+              <Image
                 src={previewUrl}
                 alt="Preview"
+                width={256}
+                height={128}
+                unoptimized
                 className="max-h-32 w-auto rounded-md object-contain shadow-sm border"
               />
             )}
@@ -233,9 +229,12 @@ export default function AdminBlogForm({onCreated}: AdminBlogFormProps) {
 
           {coverPreviewUrl ? (
             <div className="mt-2 w-full flex">
-              <img
+              <Image
                 src={coverPreviewUrl}
                 alt="Cover Preview"
+                width={256}
+                height={128}
+                unoptimized
                 className="max-h-32 w-auto rounded-md object-contain shadow-sm border"
               />
             </div>

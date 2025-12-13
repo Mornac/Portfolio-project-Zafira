@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import Image from 'next/image';
 import {Button} from '../uiStyled/button';
 import {cn} from '@/lib/utils/cn';
 import {uploadFile} from '@/lib/api/upload';
@@ -130,9 +131,12 @@ export default function AdminActionForm({onCreated}: AdminActionFormProps) {
 
         {previewUrl && (
           <div className="mt-2 flex">
-            <img
+            <Image
               src={previewUrl}
               alt="Preview"
+              width={256}
+              height={128}
+              unoptimized
               className="max-h-32 w-auto rounded-md object-contain shadow-sm border"
             />
           </div>

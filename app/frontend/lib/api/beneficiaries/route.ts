@@ -31,6 +31,7 @@ export async function PUT(request: Request) {
       data: fakeUser,
     });
   } catch (error) {
+    console.error('Erreur lors de la mise à jour du bénéficiaire', error);
     return NextResponse.json({ success: false, message: 'Erreur serveur' }, { status: 500 });
   }
 }

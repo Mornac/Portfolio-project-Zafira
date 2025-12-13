@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import {
   Carousel,
@@ -37,9 +38,11 @@ export default function BlogSectionCarousel() {
                 <div className="p-4">
                   <Card className="bg-[var(--color-surface)] shadow-md rounded-2xl overflow-hidden">
                     {blog.imageUrl && (
-                      <img
+                      <Image
                         src={blog.imageUrl}
                         alt={blog.title}
+                        width={800}
+                        height={400}
                         className="w-full h-64 object-cover"
                       />
                     )}

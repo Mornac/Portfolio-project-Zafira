@@ -25,6 +25,7 @@ export async function POST(request: Request) {
       data: temoignage,
     });
   } catch (error) {
+    console.error('Erreur lors de la création du témoignage', error);
     return NextResponse.json({ success: false, message: 'Erreur serveur' }, { status: 500 });
   }
 }
