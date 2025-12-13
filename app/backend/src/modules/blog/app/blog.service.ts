@@ -5,6 +5,7 @@ import { MediaType } from '../domain/blog.entity';
 import { UpdateBlogDto } from '../interface/dto/update-blog.dto';
 import { ActivityService } from '../../activity/app/activity.service';
 import { ActivityType } from '@prisma/client';
+import { deleteUploadedFile } from '../../../common/utils/file.utils';
 
 @Injectable()
 export class BlogService {
@@ -73,6 +74,8 @@ export class BlogService {
   async delete(id: string): Promise<void> {
     const existing = await this.blogRepo.findById(id);
     if (!existing) throw new NotFoundException(`Blog ${id} not found`);
+    const filesToDelete = [existing.mediaUrl, existing.coverImageUrl];
+    await Promise.all(filesToDelete.map((file) => deleteUploadedFile(file)));
     return this.blogRepo.delete(id);
   }
 }

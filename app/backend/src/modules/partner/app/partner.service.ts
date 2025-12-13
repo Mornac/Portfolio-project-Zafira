@@ -3,6 +3,7 @@ import type { IPartnerRepository } from '../domain/Ipartner.repository';
 import { Partner } from '../domain/partner.entity';
 import { ActivityService } from '../../activity/app/activity.service';
 import { ActivityType } from '@prisma/client';
+import { deleteUploadedFile } from '../../../common/utils/file.utils';
 
 @Injectable()
 export class PartnerService {
@@ -50,6 +51,7 @@ export class PartnerService {
     const existing = await this.partnerRepo.findById(id);
     if (!existing)
       throw new NotFoundException(`Partner with ID ${id} not found`);
+    await deleteUploadedFile(existing.logoUrl);
     return this.partnerRepo.delete(id);
   }
 }

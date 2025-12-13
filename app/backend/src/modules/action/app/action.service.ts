@@ -3,6 +3,7 @@ import type { IActionRepository } from '../domain/Iaction.repository';
 import { Action } from '../domain/action.entity';
 import { ActivityService } from '../../activity/app/activity.service';
 import { ActivityType } from '@prisma/client';
+import { deleteUploadedFile } from '../../../common/utils/file.utils';
 
 @Injectable()
 export class ActionService {
@@ -47,6 +48,7 @@ export class ActionService {
   async delete(id: string): Promise<void> {
     const existing = await this.actionRepo.findById(id);
     if (!existing) throw new NotFoundException(`Action ${id} not found`);
+    await deleteUploadedFile(existing.imageUrl);
     return this.actionRepo.delete(id);
   }
 

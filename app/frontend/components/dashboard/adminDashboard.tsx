@@ -80,7 +80,7 @@ const [limit, setLimit] = useState(3);
           daily: statRes.daily,
           monthly: statRes.monthly,
           global: statRes.global,
-          users: usersRes.totalUsers,
+          users: usersRes?.totalUsers ?? 0,
         });
       } catch (err) {
         console.error(
